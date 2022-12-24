@@ -27,6 +27,8 @@ async function run() {
         //get
         app.get('/products', async (req, res) => {
             const size = parseInt(req.query.size);
+            const skipData = parseInt(req.query.skipData)
+
             const cursor = productCollection.find({});
             let products;
             if (size) {
@@ -35,6 +37,18 @@ async function run() {
             else {
                 products = await cursor.toArray()
             }
+            res.json(products);
+        })
+
+        //it's not for working. it's just show data on male section
+        app.get('/maleProducts', async (req, res) => {
+
+            const size = parseInt(req.query.size);
+            const skipData = parseInt(req.query.skipData)
+
+            const cursor = productCollection.find({});
+            const products = await cursor.skip(skipData).limit(size).toArray()
+
             res.json(products);
         })
 
@@ -149,7 +163,7 @@ async function run() {
 run().catch(console.dir)
 
 app.get('/', (req, res) => {
-    res.send('I m jewellery server')
+    res.send('Jewellery server')
 });
 
 app.listen(port, () => {
